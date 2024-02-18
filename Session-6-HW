@@ -1,1 +1,51 @@
+import pygame
+import random
+
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+
+
+class Raindrop:
+    def __init__(self):
+        self.x = random.randint(0, WINDOW_WIDTH)  
+        self.y = 0  
+        self.speed = random.randint(5, 15)  
+        self.size = random.randint(1, 5)  
+
+    def move(self):
+        self.y += self.speed 
+
+    def draw(self, screen):
+        pygame.draw.line(screen, WHITE, (self.x, self.y), (self.x, self.y + self.size), 1)
+
+pygame.init()
+screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+pygame.display.set_caption("Raindrops")
+
+clock = pygame.time.Clock()
+
+raindrops = []
+running = True
+while running:
+    screen.fill(BLACK)
+
+    if random.random() < 0.1:  
+        raindrops.append(Raindrop())
+
+    for raindrop in raindrops:
+        raindrop.move()
+        raindrop.draw(screen)
+
+    raindrops = [raindrop for raindrop in raindrops if raindrop.y < WINDOW_HEIGHT]
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    pygame.display.flip()
+    clock.tick(30)
+
+pygame.quit()
 
